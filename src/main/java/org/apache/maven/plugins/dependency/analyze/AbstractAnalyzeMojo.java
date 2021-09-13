@@ -110,6 +110,12 @@ public abstract class AbstractAnalyzeMojo
     private boolean outputXML;
 
     /**
+     * Output the xml for the missing dependencies (used but not declared).
+     */
+    @Parameter( property = "outputJSON", defaultValue = "false" )
+    private boolean outputJSON;
+
+    /**
      * Output scriptable values for the missing dependencies (used but not declared).
      *
      * @since 2.0-alpha-5
@@ -378,6 +384,11 @@ public abstract class AbstractAnalyzeMojo
             writeDependencyXML( usedUndeclared );
         }
 
+        if ( outputJSON )
+        {
+            writeDependencyJSON( usedUndeclared, unusedDeclared );
+        }
+
         if ( scriptableOutput )
         {
             writeScriptableOutput( usedUndeclared );
@@ -458,6 +469,50 @@ public abstract class AbstractAnalyzeMojo
             }
 
             getLog().info( System.lineSeparator() + out.getBuffer() );
+        }
+    }
+
+    private String joinArtifacts( List<Artifact> artifacts )
+    {
+        StringBuffer sb = new StringBuffer();
+        for ( int i = 0; i < artifacts.size(); i++ )
+        {
+            if ( i != 0 )
+            {
+                sb.append( ", " );
+            }
+            Artifact artifact = artifacts.get( i );
+            sb.append( artifact.getGroupId() + ":" + artifact.getArtifactId() );
+        }
+        return sb.toString();
+    }
+
+    private void writeDependencyJSON( Set<Artifact> usedUndeclared, Set<Artifact> unusedDeclared ) 
+    {
+        if ( !usedUndeclared.isEmpty() || !unusedDeclared.isEmpty() )
+        {
+            StringBuilder buf = new StringBuilder();
+
+            buf.append( "{dependencyIssues:\"true\", " );
+            buf.append( "originModule: \"" + project.getGroupId() + ":" + project.getArtifactId() + "\", " );
+            if ( !usedUndeclared.isEmpty() )
+            {
+                buf.append( "usedUndeclared: [" );
+                buf.append( joinArtifacts( new ArrayList<>( usedUndeclared ) ) );
+                buf.append( "]" );
+            }
+            if ( !unusedDeclared.isEmpty() )
+            {
+                if ( !usedUndeclared.isEmpty() )
+                {
+                    buf.append( ", " );
+                }
+                buf.append( "unusedDeclared: [" );
+                buf.append( joinArtifacts( new ArrayList<>( unusedDeclared ) ) );
+                buf.append( "]" );
+            }
+            buf.append( "}" );
+            getLog().warn( buf.toString() );
         }
     }
 
