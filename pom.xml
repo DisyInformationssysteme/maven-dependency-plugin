@@ -40,12 +40,12 @@ under the License.
     <maven>${mavenVersion}</maven>
   </prerequisites>
 
-  <scm>
-    <connection>scm:git:https://gitbox.apache.org/repos/asf/maven-dependency-plugin.git</connection>
-    <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-dependency-plugin.git</developerConnection>
-    <url>https://github.com/apache/maven-dependency-plugin/tree/${project.scm.tag}</url>
+<!--   <scm>
+    <connection>scm:git:https://github.com/DisyInformationssysteme/maven-dependency-plugin</connection>
+    <developerConnection>scm:git:git@github.com:DisyInformationssysteme/maven-dependency-plugin.git</developerConnection>
+    <url>https://github.com/DisyInformationssysteme/maven-dependency-plugin/tree/${project.scm.tag}</url>
     <tag>maven-dependency-plugin-3.1.2</tag>
-  </scm>
+  </scm> -->
   <issueManagement>
     <system>JIRA</system>
     <url>https://issues.apache.org/jira/browse/MDEP</url>
