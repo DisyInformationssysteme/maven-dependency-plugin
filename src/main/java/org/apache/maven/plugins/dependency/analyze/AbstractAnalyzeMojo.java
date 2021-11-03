@@ -386,7 +386,7 @@ public abstract class AbstractAnalyzeMojo
 
         if ( outputJSON )
         {
-            writeDependencyJSON( usedUndeclared, unusedDeclared );
+            writeDependencyJSON( ignoredUsedUndeclared, ignoredUnusedDeclared );
         }
 
         if ( scriptableOutput )
