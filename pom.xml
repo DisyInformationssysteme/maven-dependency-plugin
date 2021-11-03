@@ -30,7 +30,7 @@ under the License.
   </parent>
 
   <artifactId>maven-dependency-plugin</artifactId>
-  <version>3.1.2-disy-7-SNAPSHOT</version>
+  <version>3.1.2-disy-7</version>
   <packaging>maven-plugin</packaging>
 
   <name>Apache Maven Dependency Plugin</name>
@@ -45,7 +45,7 @@ under the License.
     <developerConnection>scm:git:git@github.com:DisyInformationssysteme/maven-dependency-plugin.git</developerConnection>
 <!--     <url>https://github.com/DisyInformationssysteme/maven-dependency-plugin/tree/${project.scm.tag}</url>
     <tag>maven-dependency-plugin-3.1.2</tag> -->
-    <tag>HEAD</tag>
+    <tag>maven-dependency-plugin-3.1.2-disy-7</tag>
   </scm>
   <issueManagement>
     <system>JIRA</system>
@@ -95,7 +95,7 @@ under the License.
     <jettyVersion>9.2.28.v20190418</jettyVersion>
     <pluginTestingVersion>2.1</pluginTestingVersion>
     <javaVersion>7</javaVersion>
-    <project.build.outputTimestamp>2021-11-03T15:23:17Z</project.build.outputTimestamp>
+    <project.build.outputTimestamp>2021-11-03T17:24:16Z</project.build.outputTimestamp>
   </properties>
 
   <dependencyManagement>
