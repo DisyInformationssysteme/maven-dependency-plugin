@@ -30,7 +30,7 @@ under the License.
   </parent>
 
   <artifactId>maven-dependency-plugin</artifactId>
-  <version>3.1.2-disy-1-SNAPSHOT</version>
+  <version>3.1.2-disy-1</version>
   <packaging>maven-plugin</packaging>
 
   <name>Apache Maven Dependency Plugin</name>
@@ -94,7 +94,7 @@ under the License.
     <jettyVersion>9.2.28.v20190418</jettyVersion>
     <pluginTestingVersion>2.1</pluginTestingVersion>
     <javaVersion>7</javaVersion>
-    <project.build.outputTimestamp>2020-03-07T11:39:12Z</project.build.outputTimestamp>
+    <project.build.outputTimestamp>2021-11-03T14:07:31Z</project.build.outputTimestamp>
   </properties>
 
   <dependencyManagement>
@@ -492,4 +492,8 @@ under the License.
       </reporting>
     </profile>
   </profiles>
+
+  <scm>
+    <tag>maven-dependency-plugin-3.1.2-disy-1</tag>
+  </scm>
 </project>
