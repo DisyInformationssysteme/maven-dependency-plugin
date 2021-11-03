@@ -55,13 +55,13 @@ under the License.
     <system>Jenkins</system>
     <url>https://builds.apache.org/job/maven-box/job/maven-dependency-plugin/</url>
   </ciManagement>
-  <distributionManagement>
+<!--   <distributionManagement>
     <site>
       <id>apache.website</id>
       <url>scm:svn:https://svn.apache.org/repos/asf/maven/website/components/${maven.site.path}</url>
     </site>
   </distributionManagement>
-
+ -->
   <contributors>
     <contributor>
       <name>Bakito</name>
