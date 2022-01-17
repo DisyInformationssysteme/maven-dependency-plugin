@@ -228,6 +228,9 @@ public abstract class AbstractAnalyzeMojo
     @Parameter
     private String[] ignoredUnusedDeclaredDependencies = new String[0];
 
+    @Parameter
+    private String[] ignoredCompileScopedUsedOnlyInTestsDependencies = new String[0];
+
     /**
      * List of project packaging that will be ignored.
      * <br/>
@@ -359,6 +362,8 @@ public abstract class AbstractAnalyzeMojo
         ignoredUnusedDeclared.addAll( filterDependencies( unusedDeclared, ignoredDependencies ) );
         ignoredUnusedDeclared.addAll( filterDependencies( unusedDeclared, ignoredUnusedDeclaredDependencies ) );
 
+        filterDependencies( testArtifactsWithNonTestScope, ignoredCompileScopedUsedOnlyInTestsDependencies );
+
         boolean reported = false;
         boolean warning = false;
 
@@ -420,7 +425,7 @@ public abstract class AbstractAnalyzeMojo
 
         if ( outputJSON )
         {
-            writeDependencyJSON( usedUndeclared, unusedDeclared );
+            writeDependencyJSON( usedUndeclared, unusedDeclared, testArtifactsWithNonTestScope );
         }
 
         if ( scriptableOutput )
@@ -526,9 +531,13 @@ public abstract class AbstractAnalyzeMojo
         return sb.toString();
     }
 
-    private void writeDependencyJSON( Set<Artifact> usedUndeclared, Set<Artifact> unusedDeclared ) 
+    private void writeDependencyJSON(
+        Set<Artifact> usedUndeclared,
+        Set<Artifact> unusedDeclared,
+        Set<Artifact> testArtifactsWithNonTestScope
+    )
     {
-        if ( !usedUndeclared.isEmpty() || !unusedDeclared.isEmpty() )
+        if ( !usedUndeclared.isEmpty() || !unusedDeclared.isEmpty() || !testArtifactsWithNonTestScope.isEmpty() )
         {
             StringBuilder buf = new StringBuilder();
 
@@ -548,6 +557,16 @@ public abstract class AbstractAnalyzeMojo
                 }
                 buf.append( "unusedDeclared: [" );
                 buf.append( joinArtifacts( new ArrayList<>( unusedDeclared ) ) );
+                buf.append( "]" );
+            }
+            if ( !testArtifactsWithNonTestScope.isEmpty() )
+            {
+                if ( !usedUndeclared.isEmpty() || !unusedDeclared.isEmpty() )
+                {
+                    buf.append( ", " );
+                }
+                buf.append( "testOnlyWithNonTestScope: [" );
+                buf.append( joinArtifacts( new ArrayList<>( testArtifactsWithNonTestScope ) ) );
                 buf.append( "]" );
             }
             buf.append( "}" );
