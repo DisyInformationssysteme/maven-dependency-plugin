@@ -283,7 +283,7 @@ public abstract class AbstractAnalyzeMojo
         throws MojoExecutionException
     {
 
-        final String role = ProjectDependencyAnalyzer.ROLE;
+        final String role = ProjectDependencyAnalyzer.class.getName();
         final String roleHint = analyzer;
 
         try
