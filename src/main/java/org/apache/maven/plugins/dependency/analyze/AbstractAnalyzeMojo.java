@@ -113,6 +113,12 @@ public abstract class AbstractAnalyzeMojo
     private boolean ignoreUnusedRuntime;
 
     /**
+     * Output the xml for the missing dependencies (used but not declared).
+     */
+    @Parameter( property = "outputJSON", defaultValue = "false" )
+    private boolean outputJSON;
+
+    /**
      * Ignore all dependencies that are used only in test but not test-scoped. Setting
      * this flag has the same effect as adding all dependencies that have been flagged with
      * the <i>Non-test scoped test only dependencies found</i> warning to the
@@ -218,6 +224,13 @@ public abstract class AbstractAnalyzeMojo
      */
     @Parameter
     private String[] ignoredUsedUndeclaredDependencies = new String[0];
+
+    /**
+     * Ignore dependencies with scope:compile, which are only used in tests.
+     */
+    @Parameter
+    private String[] ignoredCompileScopedUsedOnlyInTestsDependencies = new String[0];
+
 
     /**
      * List of dependencies that will be ignored if they are declared but unused. The filter syntax is:
@@ -469,6 +482,11 @@ public abstract class AbstractAnalyzeMojo
             writeDependencyXML( usedUndeclaredWithClasses.keySet() );
         }
 
+        if ( outputJSON )
+        {
+            writeDependencyJSON( usedUndeclaredWithClasses.keySet(), unusedDeclared );
+        }
+
         if ( scriptableOutput )
         {
             writeScriptableOutput( usedUndeclaredWithClasses.keySet() );
@@ -600,6 +618,49 @@ public abstract class AbstractAnalyzeMojo
             }
 
             getLog().info( System.lineSeparator() + out.getBuffer() );
+        }
+    }
+    private String joinArtifacts( List<Artifact> artifacts )
+    {
+        StringBuffer sb = new StringBuffer();
+        for ( int i = 0; i < artifacts.size(); i++ )
+        {
+            if ( i != 0 )
+            {
+                sb.append( ", " );
+            }
+            Artifact artifact = artifacts.get( i );
+            sb.append( artifact.getGroupId() + ":" + artifact.getArtifactId() );
+        }
+        return sb.toString();
+    }
+
+    private void writeDependencyJSON( Set<Artifact> usedUndeclared, Set<Artifact> unusedDeclared )
+    {
+        if ( !usedUndeclared.isEmpty() || !unusedDeclared.isEmpty() )
+        {
+            StringBuilder buf = new StringBuilder();
+
+            buf.append( "{dependencyIssues:\"true\", " );
+            buf.append( "originModule: \"" + project.getGroupId() + ":" + project.getArtifactId() + "\", " );
+            if ( !usedUndeclared.isEmpty() )
+            {
+                buf.append( "usedUndeclared: [" );
+                buf.append( joinArtifacts( new ArrayList<>( usedUndeclared ) ) );
+                buf.append( "]" );
+            }
+            if ( !unusedDeclared.isEmpty() )
+            {
+                if ( !usedUndeclared.isEmpty() )
+                {
+                    buf.append( ", " );
+                }
+                buf.append( "unusedDeclared: [" );
+                buf.append( joinArtifacts( new ArrayList<>( unusedDeclared ) ) );
+                buf.append( "]" );
+            }
+            buf.append( "}" );
+            getLog().warn( buf.toString() );
         }
     }
 
