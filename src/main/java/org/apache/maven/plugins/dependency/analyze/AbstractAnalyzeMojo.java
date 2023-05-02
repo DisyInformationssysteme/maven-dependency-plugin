@@ -620,19 +620,23 @@ public abstract class AbstractAnalyzeMojo
             getLog().info( System.lineSeparator() + out.getBuffer() );
         }
     }
-    private String joinArtifacts( List<Artifact> artifacts )
+
+    private void joinArtifacts( StringBuilder sb, Set<Artifact> artifacts )
     {
-        StringBuffer sb = new StringBuffer();
-        for ( int i = 0; i < artifacts.size(); i++ )
+        boolean isFirst = true;
+        for ( Artifact artifact : artifacts )
         {
-            if ( i != 0 )
+            if ( isFirst )
+            {
+                isFirst = false;
+            }
+            else
             {
                 sb.append( ", " );
             }
-            Artifact artifact = artifacts.get( i );
-            sb.append( artifact.getGroupId() + ":" + artifact.getArtifactId() );
+            sb.append( "\"" ).append( artifact.getGroupId() )
+                .append( ":" ).append( artifact.getArtifactId() ).append( "\"" );
         }
-        return sb.toString();
     }
 
     private void writeDependencyJSON( Set<Artifact> usedUndeclared, Set<Artifact> unusedDeclared )
@@ -642,21 +646,18 @@ public abstract class AbstractAnalyzeMojo
             StringBuilder buf = new StringBuilder();
 
             buf.append( "{dependencyIssues:\"true\", " );
-            buf.append( "originModule: \"" + project.getGroupId() + ":" + project.getArtifactId() + "\", " );
+            buf.append( "originModule: \"" ).append( project.getGroupId() )
+                .append( ":" ).append( project.getArtifactId() ).append( "\"" );
             if ( !usedUndeclared.isEmpty() )
             {
-                buf.append( "usedUndeclared: [" );
-                buf.append( joinArtifacts( new ArrayList<>( usedUndeclared ) ) );
+                buf.append( ", usedUndeclared: [" );
+                joinArtifacts( buf, usedUndeclared );
                 buf.append( "]" );
             }
             if ( !unusedDeclared.isEmpty() )
             {
-                if ( !usedUndeclared.isEmpty() )
-                {
-                    buf.append( ", " );
-                }
-                buf.append( "unusedDeclared: [" );
-                buf.append( joinArtifacts( new ArrayList<>( unusedDeclared ) ) );
+                buf.append( ", unusedDeclared: [" );
+                joinArtifacts( buf, unusedDeclared );
                 buf.append( "]" );
             }
             buf.append( "}" );
