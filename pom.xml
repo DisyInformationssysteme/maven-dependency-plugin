@@ -40,12 +40,14 @@ under the License.
     <maven>${mavenVersion}</maven>
   </prerequisites>
 
+<!--
   <scm>
     <connection>scm:git:https://gitbox.apache.org/repos/asf/maven-dependency-plugin.git</connection>
     <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-dependency-plugin.git</developerConnection>
     <url>https://github.com/apache/maven-dependency-plugin/tree/${project.scm.tag}</url>
     <tag>maven-dependency-plugin-3.4.0</tag>
   </scm>
+-->
   <issueManagement>
     <system>JIRA</system>
     <url>https://issues.apache.org/jira/browse/MDEP</url>
@@ -54,12 +56,14 @@ under the License.
     <system>Jenkins</system>
     <url>https://ci-maven.apache.org/job/Maven/job/maven-box/job/maven-dependency-plugin/</url>
   </ciManagement>
+<!--
   <distributionManagement>
     <site>
       <id>apache.website</id>
       <url>scm:svn:https://svn.apache.org/repos/asf/maven/website/components/${maven.site.path}</url>
     </site>
   </distributionManagement>
+-->
 
   <contributors>
     <contributor>
